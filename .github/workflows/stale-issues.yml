@@ -1,0 +1,99 @@
+name: Stale Issue Management
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    name: Mark stale issues and close old ones
+    
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # Issues
+          stale-issue-message: |
+            👋 This issue has been automatically marked as stale because it has not had recent activity.
+            
+            **Will be closed in 7 days** unless there is new activity.
+            
+            If this issue is still relevant:
+            - Add a comment to keep it open
+            - Add the `keep-open` label to prevent auto-closure
+            
+            Thank you for your contribution! 🙏
+            
+          close-issue-message: |
+            🔒 This issue has been automatically closed due to inactivity.
+            
+            **Don't worry!** If this issue is still relevant, you can:
+            - Reopen it with new information
+            - Reference it in a new issue
+            - Contact a maintainer
+            
+            Thank you for your understanding! 🙏
+            
+          stale-issue-label: 'stale'
+          days-before-stale: 30
+          days-before-close: 7
+          
+          # Pull Requests  
+          stale-pr-message: |
+            👋 This pull request has been automatically marked as stale because it has not had recent activity.
+            
+            **Will be closed in 14 days** unless there is new activity.
+            
+            If this PR is still relevant:
+            - Rebase with the latest changes
+            - Address any review comments
+            - Add the `keep-open` label to prevent auto-closure
+            
+            Thank you for your contribution! 🙏
+            
+          close-pr-message: |
+            🔒 This pull request has been automatically closed due to inactivity.
+            
+            **Don't worry!** If this PR is still relevant, you can:
+            - Reopen it and address any conflicts
+            - Create a new PR with updated changes
+            - Contact a maintainer for assistance
+            
+            Thank you for your contribution! 🙏
+            
+          stale-pr-label: 'stale'
+          days-before-pr-stale: 45
+          days-before-pr-close: 14
+          
+          # Exemptions
+          exempt-issue-labels: 'keep-open,pinned,security,on-hold,in-progress'
+          exempt-pr-labels: 'keep-open,pinned,security,on-hold,in-progress,work-in-progress'
+          
+          # Only issues/PRs with these labels will be processed
+          only-labels: ''
+          
+          # Debug mode
+          debug-only: false
+          
+          # Custom messages for different labels
+          exempt-all-issue-assignees: false
+          exempt-all-pr-assignees: false
+          
+          # Close issues/PRs even if they have assignees
+          exempt-all-issue-milestones: true
+          exempt-all-pr-milestones: true
+          
+          # Process issues and PRs
+          operations-per-run: 100
+          remove-stale-when-updated: true
+          
+          # Enable ascending order (oldest first)
+          ascending: true

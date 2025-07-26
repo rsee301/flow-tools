@@ -1,0 +1,147 @@
+# GitHub Labels Configuration for Flow Tools
+# This file defines all labels used in the repository
+
+# Priority Labels
+- name: "priority-critical"
+  color: "d73a4a"
+  description: "Critical priority - needs immediate attention"
+
+- name: "priority-high"
+  color: "f85149"
+  description: "High priority - should be addressed soon"
+
+- name: "priority-medium"
+  color: "ff8c00"
+  description: "Medium priority - normal timeline"
+
+- name: "priority-low"
+  color: "0969da"
+  description: "Low priority - nice to have"
+
+# Type Labels
+- name: "bug"
+  color: "d73a4a"
+  description: "Something isn't working correctly"
+
+- name: "enhancement"
+  color: "0969da"
+  description: "New feature or improvement request"
+
+- name: "question"
+  color: "7c3aed"
+  description: "Question or support request"
+
+- name: "documentation"
+  color: "0052cc"
+  description: "Documentation related"
+
+- name: "maintenance"
+  color: "6f42c1"
+  description: "Code maintenance, refactoring, or technical debt"
+
+- name: "security"
+  color: "b91c1c"
+  description: "Security related issue"
+
+# Component Labels
+- name: "mcp"
+  color: "1d4ed8"
+  description: "Related to MCP (Model Context Protocol) functionality"
+
+- name: "bash-aliases"
+  color: "059669"
+  description: "Related to bash aliases and shell commands"
+
+- name: "preferences"
+  color: "7c2d12"
+  description: "Related to user preferences and configuration"
+
+- name: "templates"
+  color: "9333ea"
+  description: "Related to project templates"
+
+- name: "scripts"
+  color: "ea580c"
+  description: "Related to CLI scripts and automation"
+
+- name: "claude-flow-integration"
+  color: "0891b2"
+  description: "Related to Claude Flow integration"
+
+# Status Labels
+- name: "triage-needed"
+  color: "fbbf24"
+  description: "Needs triage and proper labeling"
+
+- name: "in-progress"
+  color: "22c55e"
+  description: "Currently being worked on"
+
+- name: "blocked"
+  color: "ef4444"
+  description: "Blocked by dependencies or external factors"
+
+- name: "on-hold"
+  color: "6b7280"
+  description: "On hold for strategic reasons"
+
+- name: "ready-for-review"
+  color: "10b981"
+  description: "Ready for code review"
+
+- name: "needs-feedback"
+  color: "f59e0b"
+  description: "Needs feedback from maintainer or community"
+
+# Special Labels
+- name: "good first issue"
+  color: "7057ff"
+  description: "Good for newcomers to the project"
+
+- name: "help wanted"
+  color: "008672"
+  description: "Extra attention is needed"
+
+- name: "duplicate"
+  color: "cfd3d7"
+  description: "This issue or pull request already exists"
+
+- name: "wontfix"
+  color: "ffffff"
+  description: "This will not be worked on"
+
+- name: "invalid"
+  color: "e4e669"
+  description: "This doesn't seem right"
+
+- name: "stale"
+  color: "fef3c7"
+  description: "No recent activity - may be closed"
+
+- name: "keep-open"
+  color: "0e7490"
+  description: "Prevent automatic closure due to inactivity"
+
+- name: "pinned"
+  color: "1f2937"
+  description: "Important issue that should stay visible"
+
+# Installation & Setup
+- name: "installation"
+  color: "be185d"
+  description: "Related to installation or setup process"
+
+# Testing
+- name: "testing"
+  color: "0f766e"
+  description: "Related to testing functionality"
+
+# Performance
+- name: "performance"
+  color: "dc2626"
+  description: "Performance optimization needed"
+
+# Breaking Changes
+- name: "breaking-change"
+  color: "991b1b"
+  description: "Breaking change that affects existing functionality"
