@@ -1,0 +1,11 @@
+{
+  "name": "@flow-tools/mcp-code-analyzer",
+  "version": "1.0.0",
+  "description": "Code analysis MCP tool for flow-tools",
+  "main": "index.js",
+  "type": "module",
+  "mcp": {
+    "type": "tool",
+    "capabilities": ["code-analysis", "file-operations"]
+  }
+}

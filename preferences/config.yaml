@@ -1,0 +1,88 @@
+# Flow Tools - User Preferences Configuration
+
+defaults:
+  # Default language preferences
+  language: typescript
+  packageManager: npm
+  
+  # Testing preferences
+  testing:
+    framework: jest
+    coverage: true
+    watchMode: false
+  
+  # Code quality preferences
+  linting:
+    tool: eslint
+    autoFix: true
+    strict: true
+  
+  formatting:
+    tool: prettier
+    tabWidth: 2
+    singleQuote: true
+    semi: true
+
+# Development workflow preferences
+development:
+  autoFormat: true
+  autoTest: false
+  gitHooks:
+    enabled: true
+    preCommit:
+      - lint
+      - format
+      - test
+  
+  # Claude Flow specific settings
+  claudeFlow:
+    defaultAgents: 5
+    topology: hierarchical
+    strategy: auto
+    parallelExecution: true
+
+# Custom MCP tools configuration
+mcps:
+  # List of enabled custom MCPs
+  enabled:
+    - code-analyzer
+    - project-scaffolder
+    - preference-manager
+    - template-generator
+  
+  # MCP-specific configurations
+  configs:
+    code-analyzer:
+      depth: deep
+      languages:
+        - javascript
+        - typescript
+        - python
+    
+    project-scaffolder:
+      defaultTemplate: fullstack
+      includeTests: true
+      includeDocs: true
+
+# Project templates
+templates:
+  available:
+    - minimal
+    - fullstack
+    - api-only
+    - frontend-only
+    - microservice
+  
+  default: fullstack
+
+# Environment-specific overrides
+environments:
+  production:
+    testing:
+      coverage: true
+      minCoverage: 80
+    
+  development:
+    testing:
+      watchMode: true
+      coverage: false

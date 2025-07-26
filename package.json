@@ -1,0 +1,35 @@
+{
+  "name": "flow-tools",
+  "version": "1.0.0",
+  "description": "A personal toolset layer for claude-flow with custom MCPs and project preferences",
+  "main": "src/index.js",
+  "scripts": {
+    "init": "node scripts/init.js",
+    "load-preferences": "node scripts/load-preferences.js",
+    "add-mcp": "node scripts/add-mcp.js",
+    "sync": "node scripts/sync-preferences.js",
+    "setup": "npm install && npm run init"
+  },
+  "keywords": [
+    "claude-flow",
+    "mcp",
+    "ai",
+    "development",
+    "preferences",
+    "tools"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "js-yaml": "^4.1.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "inquirer": "^9.2.15"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "typescript": "^5.3.3"
+  }
+}
