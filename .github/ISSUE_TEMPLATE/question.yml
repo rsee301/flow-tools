@@ -1,0 +1,146 @@
+name: ❓ Question or Support
+description: Ask a question or get help with Flow Tools
+title: "[Question]: "
+labels: ["question", "triage-needed"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reaching out! We're here to help. Please provide as much detail as possible so we can assist you effectively.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What would you like to know or what help do you need?
+      placeholder: |
+        I'm trying to understand how to...
+        I'm having trouble with...
+        Could someone explain...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Question Category
+      description: What type of question is this?
+      options:
+        - Installation & Setup
+        - Configuration & Preferences
+        - MCP Tools Usage
+        - Bash Aliases
+        - Templates & Scaffolding
+        - Claude Flow Integration
+        - Troubleshooting
+        - Best Practices
+        - Feature Usage
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context & Background
+      description: Please provide context about what you're trying to accomplish
+      placeholder: |
+        I'm working on a project that involves...
+        My goal is to...
+        I expected to be able to...
+
+  - type: textarea
+    id: attempted
+    attributes:
+      label: What Have You Tried?
+      description: What steps have you already taken to solve this?
+      placeholder: |
+        1. I tried following the documentation at...
+        2. I ran the command...
+        3. I checked the configuration...
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Information
+      description: Please provide your environment details (if relevant)
+      placeholder: |
+        - OS: [e.g. macOS 14.0, Ubuntu 22.04, Windows 11]
+        - Node.js: [e.g. 20.10.0]
+        - npm: [e.g. 10.2.3]
+        - Shell: [e.g. zsh, bash, fish]
+        - Flow Tools version: [e.g. 1.0.0]
+        - Claude Flow version: [e.g. 2.0.0-alpha]
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Relevant Configuration
+      description: If applicable, please share relevant configuration files (redact sensitive information)
+      placeholder: |
+        # preferences/config.yaml
+        # .claude/settings.json
+        # package.json (relevant parts)
+      render: yaml
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Command Output or Logs
+      description: If you've run commands, please share the output or any error messages
+      placeholder: |
+        $ npx flow-tools init
+        [command output here]
+      render: shell
+
+  - type: checkboxes
+    id: resources
+    attributes:
+      label: Documentation Check
+      description: Have you checked these resources?
+      options:
+        - label: I've read the README.md
+        - label: I've checked the documentation in the docs/ folder
+        - label: I've looked at the bash-aliases/README.md (if relevant)
+        - label: I've searched existing issues and discussions
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency Level
+      description: How urgent is this question?
+      options:
+        - "Not urgent - just curious"
+        - "Somewhat urgent - affects my current work"
+        - "Urgent - blocking my progress"
+        - "Critical - affects production system"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: help
+    attributes:
+      label: How Can We Help?
+      description: What type of help are you looking for?
+      options:
+        - label: Step-by-step guidance
+        - label: Code examples or snippets
+        - label: Configuration recommendations
+        - label: Best practices advice
+        - label: Troubleshooting assistance
+        - label: Documentation clarification
+        - label: Feature explanation
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information
+      description: Any other details that might be helpful for us to know
+      placeholder: |
+        Additional context that might be helpful:
+        - Project size/complexity
+        - Team requirements
+        - Integration constraints
+        - Performance considerations

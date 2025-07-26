@@ -1,0 +1,184 @@
+name: Issue Metrics & Analytics
+
+on:
+  schedule:
+    # Run weekly on Mondays at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  issues: read
+  pull-requests: read
+  contents: write
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    name: Generate Issue Analytics
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Generate Issue Metrics
+        uses: actions/github-script@v7
+        id: metrics
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            
+            // Get all issues (open and closed) from the last 30 days
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: 'all',
+              since: thirtyDaysAgo.toISOString(),
+              per_page: 100
+            });
+            
+            // Filter out pull requests
+            const actualIssues = issues.filter(issue => !issue.pull_request);
+            
+            // Calculate metrics
+            const metrics = {
+              total: actualIssues.length,
+              open: actualIssues.filter(i => i.state === 'open').length,
+              closed: actualIssues.filter(i => i.state === 'closed').length,
+              byLabel: {},
+              byComponent: {},
+              avgTimeToClose: 0,
+              responseTime: 0
+            };
+            
+            // Label analysis
+            actualIssues.forEach(issue => {
+              issue.labels.forEach(label => {
+                const labelName = typeof label === 'string' ? label : label.name;
+                metrics.byLabel[labelName] = (metrics.byLabel[labelName] || 0) + 1;
+              });
+            });
+            
+            // Component analysis
+            const componentLabels = ['mcp', 'bash-aliases', 'preferences', 'templates', 'scripts', 'documentation'];
+            componentLabels.forEach(component => {
+              metrics.byComponent[component] = actualIssues.filter(issue => 
+                issue.labels.some(label => 
+                  (typeof label === 'string' ? label : label.name) === component
+                )
+              ).length;
+            });
+            
+            // Calculate average time to close (for closed issues)
+            const closedIssues = actualIssues.filter(i => i.state === 'closed' && i.closed_at);
+            if (closedIssues.length > 0) {
+              const totalTime = closedIssues.reduce((sum, issue) => {
+                const created = new Date(issue.created_at);
+                const closed = new Date(issue.closed_at);
+                return sum + (closed - created);
+              }, 0);
+              metrics.avgTimeToClose = Math.round(totalTime / closedIssues.length / (1000 * 60 * 60 * 24)); // days
+            }
+            
+            return metrics;
+            
+      - name: Create Metrics Report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const metrics = ${{ steps.metrics.outputs.result }};
+            const date = new Date().toLocaleDateString();
+            
+            const report = `# 📊 Issue Analytics Report - ${date}
+            
+            ## 📈 Overview (Last 30 Days)
+            
+            - **Total Issues**: ${metrics.total}
+            - **Open Issues**: ${metrics.open}
+            - **Closed Issues**: ${metrics.closed}
+            - **Average Time to Close**: ${metrics.avgTimeToClose} days
+            
+            ## 🏷️ Issues by Label
+            
+            ${Object.entries(metrics.byLabel)
+              .sort(([,a], [,b]) => b - a)
+              .map(([label, count]) => `- **${label}**: ${count}`)
+              .join('\n')}
+            
+            ## 🧩 Issues by Component
+            
+            ${Object.entries(metrics.byComponent)
+              .sort(([,a], [,b]) => b - a)
+              .filter(([,count]) => count > 0)
+              .map(([component, count]) => `- **${component}**: ${count}`)
+              .join('\n')}
+            
+            ## 📋 Recommendations
+            
+            ${metrics.open > 10 ? '- ⚠️ High number of open issues - consider triage priority\n' : ''}
+            ${metrics.byLabel['triage-needed'] > 5 ? '- 🔍 Multiple issues need triage\n' : ''}
+            ${metrics.avgTimeToClose > 14 ? '- ⏰ Issues taking longer than 2 weeks to close\n' : ''}
+            ${metrics.byLabel['bug'] > metrics.byLabel['enhancement'] ? '- 🐛 More bugs than enhancements - focus on stability\n' : ''}
+            
+            ---
+            *This report was generated automatically on ${date}*`;
+            
+            // Store as GitHub Action summary
+            core.summary.addRaw(report);
+            await core.summary.write();
+            
+            console.log('Issue analytics report generated successfully');
+            
+      - name: Comment on tracking issue (if exists)
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const metrics = ${{ steps.metrics.outputs.result }};
+            const date = new Date().toLocaleDateString();
+            
+            // Look for an existing tracking issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'tracking,metrics',
+              state: 'open'
+            });
+            
+            if (issues.data.length > 0) {
+              const trackingIssue = issues.data[0];
+              
+              const comment = `## 📊 Weekly Metrics Update - ${date}
+              
+              **Summary**: ${metrics.total} issues in last 30 days (${metrics.open} open, ${metrics.closed} closed)
+              
+              **Top Components**:
+              ${Object.entries(metrics.byComponent)
+                .sort(([,a], [,b]) => b - a)
+                .filter(([,count]) => count > 0)
+                .slice(0, 3)
+                .map(([component, count]) => `- ${component}: ${count}`)
+                .join('\n')}
+              
+              **Avg Resolution Time**: ${metrics.avgTimeToClose} days
+              
+              <details>
+              <summary>View Full Metrics</summary>
+              
+              **All Labels**:
+              ${Object.entries(metrics.byLabel)
+                .sort(([,a], [,b]) => b - a)
+                .map(([label, count]) => `- ${label}: ${count}`)
+                .join('\n')}
+              
+              </details>`;
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: trackingIssue.number,
+                body: comment
+              });
+            }

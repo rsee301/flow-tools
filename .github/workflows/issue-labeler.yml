@@ -1,0 +1,180 @@
+name: Issue Auto Labeler & Triage
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  pull-requests: read
+  contents: read
+
+jobs:
+  analyze-and-label:
+    runs-on: ubuntu-latest
+    name: Analyze and Label Issues
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: |
+          npm install
+          npm install @octokit/rest js-yaml
+          
+      - name: Analyze Issue Content
+        id: analyze
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const title = issue.title.toLowerCase();
+            const body = (issue.body || '').toLowerCase();
+            const labels = [];
+            const priority = [];
+            
+            // Content analysis for automatic labeling
+            const contentRules = {
+              // Component labels
+              'mcp': ['mcp', 'model context protocol'],
+              'bash-aliases': ['alias', 'bash', 'shell', 'command'],
+              'preferences': ['preference', 'config', 'configuration', 'yaml'],
+              'templates': ['template', 'scaffold', 'boilerplate'],
+              'scripts': ['script', 'automation', 'cli'],
+              'documentation': ['doc', 'readme', 'guide', 'documentation'],
+              
+              // Type labels
+              'bug': ['bug', 'error', 'issue', 'problem', 'broken', 'fail', 'crash'],
+              'enhancement': ['feature', 'enhancement', 'improve', 'add', 'new'],
+              'question': ['question', 'help', 'how', 'what', 'why', 'support'],
+              'maintenance': ['refactor', 'cleanup', 'maintenance', 'update', 'upgrade'],
+              'security': ['security', 'vulnerability', 'auth', 'permission'],
+              
+              // Priority indicators
+              'priority-high': ['urgent', 'critical', 'important', 'asap', 'breaking'],
+              'priority-medium': ['medium', 'moderate', 'soon'],
+              'priority-low': ['nice to have', 'later', 'minor', 'cosmetic']
+            };
+            
+            // Apply content-based rules
+            const fullText = title + ' ' + body;
+            for (const [label, keywords] of Object.entries(contentRules)) {
+              if (keywords.some(keyword => fullText.includes(keyword))) {
+                labels.push(label);
+              }
+            }
+            
+            // Special rules for flow-tools project
+            if (title.includes('claude-flow') || body.includes('claude-flow')) {
+              labels.push('claude-flow-integration');
+            }
+            
+            if (title.includes('install') || body.includes('installation')) {
+              labels.push('installation');
+            }
+            
+            // Default labels if no specific type detected
+            if (!labels.some(l => ['bug', 'enhancement', 'question', 'maintenance'].includes(l))) {
+              labels.push('triage-needed');
+            }
+            
+            // Ensure at least one priority
+            if (!labels.some(l => l.startsWith('priority-'))) {
+              labels.push('priority-medium');
+            }
+            
+            return { labels };
+            
+      - name: Apply Labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = ${{ steps.analyze.outputs.result }}.labels;
+            
+            if (labels && labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: labels
+              });
+              
+              console.log(`Applied labels: ${labels.join(', ')}`);
+            }
+            
+      - name: Auto-assign based on component
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const title = issue.title.toLowerCase();
+            const body = (issue.body || '').toLowerCase();
+            const fullText = title + ' ' + body;
+            
+            // Auto-assignment rules (customize with actual usernames)
+            const assignmentRules = {
+              'mcp': ['rsee301'], // MCP expert
+              'bash-aliases': ['rsee301'], // Shell expert
+              'documentation': ['rsee301'], // Documentation maintainer
+              'security': ['rsee301'] // Security expert
+            };
+            
+            let assignee = null;
+            for (const [component, assignees] of Object.entries(assignmentRules)) {
+              if (fullText.includes(component)) {
+                assignee = assignees[0]; // Take first available
+                break;
+              }
+            }
+            
+            if (assignee) {
+              try {
+                await github.rest.issues.addAssignees({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  assignees: [assignee]
+                });
+                console.log(`Auto-assigned to: ${assignee}`);
+              } catch (error) {
+                console.log(`Could not assign to ${assignee}: ${error.message}`);
+              }
+            }
+            
+      - name: Comment with triage info
+        if: contains(steps.analyze.outputs.result, 'triage-needed')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `👋 Thanks for opening this issue!
+            
+            This issue has been automatically labeled as **triage-needed** because it needs further classification.
+            
+            **Next steps:**
+            1. A maintainer will review and apply appropriate labels
+            2. If this is a bug, please provide reproduction steps
+            3. If this is a feature request, please describe the use case
+            
+            **Helpful information to include:**
+            - Your environment (OS, Node.js version)
+            - Steps to reproduce (for bugs)
+            - Expected vs actual behavior
+            - Relevant code or configuration
+            
+            This comment was generated automatically by our issue triage system.`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });

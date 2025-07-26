@@ -1,0 +1,170 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement for Flow Tools
+title: "[Feature]: "
+labels: ["enhancement", "triage-needed"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please provide as much detail as possible to help us understand your request.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Feature Summary
+      description: A clear and concise description of the feature you'd like to see
+      placeholder: Briefly describe the feature...
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? What's the current limitation?
+      placeholder: |
+        Currently, when I try to do X, I have to Y which is problematic because Z...
+        
+        This would be solved if Flow Tools could...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your ideal solution to this problem
+      placeholder: |
+        I'd like to see a feature that allows users to...
+        
+        This could work by...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component would this feature affect?
+      options:
+        - MCP Tools
+        - Bash Aliases
+        - Preferences System
+        - Templates
+        - Scripts/CLI
+        - Documentation
+        - Installation/Setup
+        - New Component
+        - Multiple Components
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature to you?
+      options:
+        - Nice to have
+        - Useful enhancement
+        - Important for my workflow
+        - Critical need
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: Use Cases
+      description: Describe specific scenarios where this feature would be useful
+      placeholder: |
+        Use Case 1: When working on large projects with multiple MCP tools...
+        Use Case 2: When setting up new development environments...
+        Use Case 3: When collaborating with teams...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions or workarounds?
+      placeholder: |
+        I've tried using X, but it doesn't work because...
+        Another approach might be Y, but that has limitations...
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples or Mockups
+      description: Provide examples of how this feature might work (code snippets, CLI commands, etc.)
+      placeholder: |
+        ```bash
+        # Example CLI usage
+        npx flow-tools new-feature --option value
+        ```
+        
+        ```yaml
+        # Example configuration
+        new-feature:
+          enabled: true
+          settings:
+            option: value
+        ```
+      render: markdown
+
+  - type: checkboxes
+    id: implementation
+    attributes:
+      label: Implementation Ideas
+      description: Do you have any thoughts on how this could be implemented?
+      options:
+        - label: I have ideas about the technical implementation
+        - label: I'm willing to help implement this feature
+        - label: I can provide testing and feedback during development
+        - label: I can help with documentation
+
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: Breaking Changes
+      description: Would this feature require breaking changes to existing functionality?
+      options:
+        - "No, fully backward compatible"
+        - "Minor breaking changes acceptable"
+        - "Major breaking changes but worth it"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm you've completed these steps
+      options:
+        - label: I've searched existing issues and this feature hasn't been requested
+          required: true
+        - label: I've provided a clear problem statement and solution
+          required: true
+        - label: I've considered the impact on existing users
+          required: true
+        - label: I've provided specific use cases and examples
+          required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, references, or information that might be helpful
+      placeholder: |
+        Links to similar features in other tools:
+        - Tool A: https://example.com/feature
+        - Tool B: https://example.com/similar
+        
+        Additional considerations:
+        - Performance impact
+        - Security implications
+        - Maintenance requirements
