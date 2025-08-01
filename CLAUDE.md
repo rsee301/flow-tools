@@ -326,6 +326,40 @@ For more information about SPARC methodology and batchtools optimization, see:
 - SPARC Guide: https://github.com/ruvnet/claude-code-flow/docs/sparc.md
 - Batchtools Documentation: https://github.com/ruvnet/claude-code-flow/docs/batchtools.md
 
+## 🚨 IMPORTANT: Agent Name Compatibility
+
+### Common Agent Name Errors
+If you encounter errors like:
+```
+Error: Agent type 'analyst' not found
+Error: Agent type 'architect' not found  
+Error: Agent type 'coordinator' not found
+```
+
+### Solution: Use Correct Agent Names
+Some agent definition files exist locally but aren't registered in claude-flow. Use these alternatives:
+
+| Local Agent File | Use This Registered Agent | Purpose |
+|-----------------|--------------------------|---------|
+| `analyst` | `code-analyzer` | Code quality and CI/CD analysis |
+| `architect` | `system-architect` | System architecture design |
+| `coordinator` | `pr-manager` | PR strategy and coordination |
+
+### Quick Fix Example
+```bash
+# ❌ WRONG - Will fail with "agent not found"
+Task("Analyze CI/CD", "...", "analyst")
+Task("Design system", "...", "architect")
+Task("Coordinate PR", "...", "coordinator")
+
+# ✅ CORRECT - Use registered agent names
+Task("Analyze CI/CD", "...", "code-analyzer")
+Task("Design system", "...", "system-architect")
+Task("Coordinate PR", "...", "pr-manager")
+```
+
+See `/docs/AGENT_NAME_MAPPING.md` for complete agent name reference.
+
 # important-instruction-reminders
 Message 3: Task("Agent 2")
 Message 4: Read("file1.js")
