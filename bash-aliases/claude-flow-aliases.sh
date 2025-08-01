@@ -20,6 +20,9 @@ alias cfi='npx claude-flow@alpha init'           # Initialize project
 alias cfst='npx claude-flow@alpha status'        # Check status
 alias cfp='npx claude-flow@alpha plan'           # Planning mode
 
+# Claude command with dangerously-skip-permissions flag
+alias clauded='claude --dangerously-skip-permissions'
+
 # Function for swarm with objective (includes --claude flag automatically)
 cfswarm() {
     if [ -z "$1" ]; then
@@ -53,6 +56,7 @@ cfhelp() {
     echo "  cfi      - Initialize project"
     echo "  cfst     - Check status"
     echo "  cfp      - Planning mode"
+    echo "  clauded  - Run claude with --dangerously-skip-permissions"
     echo ""
     echo "Functions:"
     echo "  cfswarm 'objective' - Run swarm with objective (auto-adds --claude)"
