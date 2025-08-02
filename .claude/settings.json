@@ -107,6 +107,16 @@
           }
         ]
       }
+    ],
+    "user-prompt-submit-hook": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash -c 'INPUT=$(cat); USER_PROMPT=$(echo \"$INPUT\" | jq -r \".user_prompt // empty\"); if [ -n \"$USER_PROMPT\" ]; then /home/rsee/projects/flow-tools/.claude/helpers/github-checkpoint.sh create \"$USER_PROMPT\"; fi'"
+          }
+        ]
+      }
     ]
   },
   "includeCoAuthoredBy": true,
