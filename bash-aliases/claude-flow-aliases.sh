@@ -61,5 +61,56 @@ cfhelp() {
     echo "Functions:"
     echo "  cfswarm 'objective' - Run swarm with objective (auto-adds --claude)"
     echo "  cfhive 'objective'  - Run hive-mind with objective (auto-adds --claude)"
-    echo "  cfhelp             - Show this help message"
+    echo "  cfpr <branch> [desc] - Start iterative PR development"
+    echo "  cfpr-resume <pr#>    - Resume PR iteration"
+    echo "  cfhelp               - Show this help message"
+}
+
+# PR Iteration Workflow
+function cfpr() {
+    local branch="$1"
+    local description="$2"
+    shift 2
+    
+    if [ -z "$branch" ]; then
+        echo "Usage: cfpr <branch> [description] [options]"
+        echo "Example: cfpr feature/auth 'Add user authentication' --max-iterations 10"
+        return 1
+    fi
+    
+    echo "🔄 Starting iterative PR development..."
+    echo "Branch: $branch"
+    echo "Description: ${description:-'Automated PR iteration'}"
+    echo ""
+    
+    # Run the pr-iterate command
+    npx flow-tools github pr-iterate \
+        --branch "$branch" \
+        --auto-fix \
+        --monitor-ci \
+        --parallel \
+        --report \
+        "$@"
+}
+
+# Resume PR iteration
+function cfpr-resume() {
+    local pr_number="$1"
+    shift
+    
+    if [ -z "$pr_number" ]; then
+        echo "Usage: cfpr-resume <pr-number> [options]"
+        echo "Example: cfpr-resume 123 --max-iterations 5"
+        return 1
+    fi
+    
+    echo "🔄 Resuming PR #$pr_number iteration..."
+    
+    npx flow-tools github pr-iterate \
+        --pr-number "$pr_number" \
+        --resume \
+        --auto-fix \
+        --monitor-ci \
+        --report \
+        "$@"
 }

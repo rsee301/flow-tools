@@ -1,0 +1,7 @@
+This is a test file to verify that post-tool checkpoints are working correctly.
+
+The system should create a checkpoint after this Write operation if:
+1. Enough time has passed since the last checkpoint (5 minutes by default)
+2. There are enough changes (3 files minimum by default)
+
+This helps ensure continuous backup without excessive commits.

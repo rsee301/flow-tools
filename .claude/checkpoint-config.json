@@ -6,5 +6,9 @@
   "max_checkpoints": 100,
   "push_to_branch": "current",
   "create_tags": true,
-  "verbose": true
+  "verbose": true,
+  "post_tool_checkpoints": "selective",
+  "checkpoint_interval": 300,
+  "checkpoint_tools": ["Write", "MultiEdit", "Task", "Bash"],
+  "min_changes_for_checkpoint": 3
 }
