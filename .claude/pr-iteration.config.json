@@ -1,0 +1,135 @@
+{
+  "pr-iterate": {
+    "defaults": {
+      "maxIterations": 10,
+      "timeout": 3600000,
+      "parallel": true,
+      "autoFix": true,
+      "monitorCI": true
+    },
+    "ci": {
+      "pollInterval": 30000,
+      "requiredChecks": [
+        "test-suite",
+        "lint",
+        "type-check",
+        "security-scan"
+      ],
+      "optionalChecks": [
+        "performance",
+        "coverage",
+        "documentation"
+      ],
+      "qualityThresholds": {
+        "coverage": 80,
+        "performance": 95,
+        "bundleSize": 1048576
+      }
+    },
+    "fixes": {
+      "testFailures": {
+        "enabled": true,
+        "maxAttempts": 3,
+        "agents": ["tester", "tdd-london-swarm"],
+        "strategies": ["isolate", "mock", "refactor"]
+      },
+      "lintErrors": {
+        "enabled": true,
+        "maxAttempts": 2,
+        "agents": ["code-analyzer"],
+        "autoFormat": true
+      },
+      "buildErrors": {
+        "enabled": true,
+        "maxAttempts": 2,
+        "agents": ["coder", "system-architect"],
+        "strategies": ["dependency-fix", "type-fix", "import-fix"]
+      },
+      "typeErrors": {
+        "enabled": true,
+        "maxAttempts": 2,
+        "agents": ["coder", "code-analyzer"],
+        "strategies": ["infer-types", "add-annotations", "fix-interfaces"]
+      },
+      "securityIssues": {
+        "enabled": true,
+        "maxAttempts": 1,
+        "agents": ["security-manager"],
+        "escalate": true
+      },
+      "performanceRegressions": {
+        "enabled": true,
+        "maxAttempts": 3,
+        "agents": ["perf-analyzer", "performance-benchmarker"],
+        "threshold": 5
+      }
+    },
+    "swarm": {
+      "topology": "hierarchical",
+      "maxAgents": 8,
+      "coordination": {
+        "queen": "pr-iteration-coordinator",
+        "workers": [
+          "ci-monitor",
+          "test-analyzer",
+          "fix-coordinator",
+          "code-reviewer"
+        ],
+        "specialists": [
+          "tester",
+          "code-analyzer",
+          "security-manager",
+          "performance-benchmarker"
+        ]
+      },
+      "memoryStrategy": {
+        "shareFailures": true,
+        "shareFixes": true,
+        "persistIterations": true,
+        "cacheAnalysis": true
+      }
+    },
+    "backoff": {
+      "strategy": "exponential",
+      "initialDelay": 2000,
+      "maxDelay": 300000,
+      "multiplier": 2,
+      "jitter": true
+    },
+    "notifications": {
+      "webhook": null,
+      "events": [
+        "iteration-start",
+        "fix-applied",
+        "iteration-complete",
+        "all-checks-passed",
+        "max-iterations-reached",
+        "error-occurred"
+      ],
+      "channels": {
+        "slack": null,
+        "email": null,
+        "github": true
+      }
+    },
+    "reporting": {
+      "generateReport": true,
+      "includeMetrics": true,
+      "format": "markdown",
+      "destination": ".claude/pr-reports/",
+      "sections": [
+        "summary",
+        "iterations",
+        "fixes",
+        "metrics",
+        "recommendations"
+      ]
+    },
+    "recovery": {
+      "checkpointInterval": 300000,
+      "checkpointPath": ".claude/checkpoints/",
+      "autoResume": true,
+      "maxRetries": 3
+    }
+  }
+}

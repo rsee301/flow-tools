@@ -12,6 +12,14 @@ const { initializeProject } = require('./initializer');
 const { addCustomMCP } = require('./mcp-manager');
 const { syncPreferences } = require('./sync');
 
+// Import GitHub commands if available
+let githubCommand;
+try {
+  githubCommand = require('./commands/github/index.js').default;
+} catch (e) {
+  // GitHub commands not available in CommonJS
+}
+
 // Load package.json for version
 const packageJson = require('../package.json');
 
@@ -60,6 +68,11 @@ program
     console.log('🔄 Syncing preferences...');
     await syncPreferences(process.cwd());
   });
+
+// Add GitHub commands if available
+if (githubCommand) {
+  program.addCommand(githubCommand);
+}
 
 // Parse command line arguments
 program.parse(process.argv);
