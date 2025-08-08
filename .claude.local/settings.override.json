@@ -1,0 +1,24 @@
+{
+  "enabledMcpjsonServers": ["claude-flow", "code-index"],
+  "customAgentInstructions": {
+    "researcher": {
+      "mcpTools": [
+        "mcp__code-index__search_code_advanced",
+        "mcp__code-index__find_files"
+      ],
+      "instructions": "Always use code-index MCP for efficient searching"
+    },
+    "coder": {
+      "mcpTools": [
+        "mcp__code-index__find_files",
+        "mcp__code-index__refresh_index"
+      ],
+      "instructions": "Check existing files with code-index before creating new ones"
+    }
+  },
+  "preserveOnUpdate": {
+    "hooks": true,
+    "permissions": true,
+    "env": true
+  }
+}

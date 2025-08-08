@@ -1,0 +1,123 @@
+name: 🌱 Needs Grooming
+description: Quick capture for ideas that need refinement and development
+title: "[Grooming]: "
+labels: ["needs-grooming", "triage-needed"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to quickly capture ideas, thoughts, or rough concepts that need further refinement.
+        Don't worry about having all the details - that's what grooming is for!
+
+  - type: input
+    id: quick-title
+    attributes:
+      label: Quick Summary
+      description: A brief one-liner about your idea
+      placeholder: e.g., "Better error handling for MCP tools" or "Visual workflow builder"
+    validations:
+      required: true
+
+  - type: textarea
+    id: raw-idea
+    attributes:
+      label: The Idea
+      description: Dump your thoughts here - bullet points, stream of consciousness, whatever works!
+      placeholder: |
+        Just write whatever comes to mind...
+        
+        - Maybe we could...
+        - What if...
+        - I was thinking about...
+        - It would be cool if...
+      render: markdown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: idea-type
+    attributes:
+      label: Type of Idea
+      description: What kind of idea is this? (best guess is fine)
+      options:
+        - Feature/Enhancement
+        - Bug/Problem to solve
+        - Documentation/Examples
+        - Performance/Optimization
+        - Developer Experience
+        - Architecture/Design
+        - Integration/Plugin
+        - Not sure yet
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context or Trigger
+      description: What made you think of this? (optional but helpful)
+      placeholder: |
+        - I was working on X when I realized...
+        - A user mentioned...
+        - I saw this in another tool...
+        - Pain point I keep hitting...
+
+  - type: textarea
+    id: initial-thoughts
+    attributes:
+      label: Initial Thoughts
+      description: Any quick thoughts on implementation, challenges, or benefits? (totally optional)
+      placeholder: |
+        Rough ideas about:
+        - How it might work
+        - Potential challenges
+        - Who would benefit
+        - Related features
+
+  - type: checkboxes
+    id: grooming-needs
+    attributes:
+      label: What This Needs
+      description: What kind of grooming would help? (check all that apply)
+      options:
+        - label: More detailed requirements
+        - label: Technical feasibility check
+        - label: User stories/use cases
+        - label: Design mockups/examples
+        - label: Discussion with team/community
+        - label: Research similar solutions
+        - label: Break down into smaller tasks
+        - label: Priority assessment
+
+  - type: dropdown
+    id: confidence-level
+    attributes:
+      label: Confidence Level
+      description: How sure are you about this idea?
+      options:
+        - "Just a thought - needs validation"
+        - "Pretty sure this has legs"
+        - "Definitely worth exploring"
+        - "This could be game-changing"
+    validations:
+      required: false
+
+  - type: textarea
+    id: tags
+    attributes:
+      label: Tags/Keywords
+      description: Any tags to help categorize this idea?
+      placeholder: |
+        #workflow #automation #cli #mcp #integration
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### 💡 Remember
+        - This is just a starting point - ideas evolve!
+        - No idea is too rough or too simple
+        - The grooming process will help refine and validate
+        - Feel free to submit and iterate later

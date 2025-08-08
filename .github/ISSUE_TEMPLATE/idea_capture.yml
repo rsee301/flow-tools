@@ -1,0 +1,52 @@
+name: 💡 Quick Idea
+description: Super quick idea capture - just the essentials
+title: "[Idea]: "
+labels: ["idea-capture", "needs-grooming"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Got a quick idea? Capture it here in 30 seconds or less!
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: The Idea
+      description: What's your idea? (one sentence to one paragraph)
+      placeholder: |
+        Quick thought...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Quick categorization (optional)
+      options:
+        - ""
+        - "Feature"
+        - "Improvement"
+        - "Integration"
+        - "Workflow"
+        - "Performance"
+        - "DX"
+        - "Other"
+    validations:
+      required: false
+
+  - type: input
+    id: keywords
+    attributes:
+      label: Keywords
+      description: 2-3 keywords for easy searching later
+      placeholder: "e.g., cli, automation, templates"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        That's it! Submit now and refine later. 🚀

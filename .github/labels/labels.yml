@@ -68,6 +68,23 @@
   color: "0891b2"
   description: "Related to Claude Flow integration"
 
+# Grooming & Ideation Labels
+- name: "needs-grooming"
+  color: "c084fc"
+  description: "Raw idea that needs refinement and development"
+
+- name: "idea-capture"
+  color: "e9d5ff"
+  description: "Quick idea or thought captured for later exploration"
+
+- name: "grooming-in-progress"
+  color: "a78bfa"
+  description: "Currently being refined and developed"
+
+- name: "ready-for-development"
+  color: "7c3aed"
+  description: "Groomed and ready to be worked on"
+
 # Status Labels
 - name: "triage-needed"
   color: "fbbf24"

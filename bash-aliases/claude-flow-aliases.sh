@@ -22,6 +22,7 @@ alias cfp='npx claude-flow@alpha plan'           # Planning mode
 
 # Claude command with dangerously-skip-permissions flag
 alias clauded='claude --dangerously-skip-permissions'
+alias dsp='claude --dangerously-skip-permissions'
 
 # Function for swarm with objective (includes --claude flag automatically)
 cfswarm() {
@@ -57,6 +58,7 @@ cfhelp() {
     echo "  cfst     - Check status"
     echo "  cfp      - Planning mode"
     echo "  clauded  - Run claude with --dangerously-skip-permissions"
+    echo "  dsp      - Run claude with --dangerously-skip-permissions (short alias)"
     echo ""
     echo "Functions:"
     echo "  cfswarm 'objective' - Run swarm with objective (auto-adds --claude)"
